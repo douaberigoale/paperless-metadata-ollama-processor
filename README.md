@@ -49,6 +49,33 @@ docker run -p 5000:5000 \
   -e PAPERLESS_API_TOKEN=<your-paperless-api-token> \
   paperless-metadata-ollama-processor
 ```
+
+Otherwise, you can use this docker-compose.yml to run the Docker container:
+
+```docker
+version: '3.8'
+
+services:
+  (... paperless services ...)
+
+  paperless-metadata-ollama-processor:
+    image: douaberigoale/paperless-metadata-ollama-processor:latest
+    ports:
+      - "5000:5000"
+    environment:
+      - APP_ENV=production
+      - APP_PORT=5000
+      - LOG_FILE=/data/log
+      - OLLAMA_PROMPT_FILE=/data/prompt
+      - OLLAMA_MODEL_NAME=gemma2:2b
+      - OLLAMA_API_URL=http://ollama:11434/api/generate
+      - OLLAMA_TRUNCATE_NUMBER=100
+      - PAPERLESS_API_URL=http://paperless-ngx:8000/api
+      - PAPERLESS_API_TOKEN=<your-paperless-api-token>
+    volumes:
+      - ./data:/data
+```
+
 ---
 
 ## Environment Variables
