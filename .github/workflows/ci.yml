@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+  # Push Docker image to DockerHub only on release events
+  release:
+    types: [created]
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -34,8 +38,9 @@ jobs:
       run: |
         pytest
 
-  # Job 2: Build Docker image (only if tests are successful)
-  build:
+  # Job 2: Build and Push Docker image (only on release)
+  build-and-push:
+    if: github.event_name == 'release' && github.event.action == 'created'
     needs: test
     runs-on: ubuntu-latest
 
@@ -48,7 +53,7 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    # Step 3: Log in to DockerHub using secrets (optional for pushing)
+    # Step 3: Log in to DockerHub using secrets (for pushing the image)
     - name: Log in to DockerHub
       uses: docker/login-action@v2
       with:
@@ -60,7 +65,13 @@ jobs:
       run: |
         docker build -t ${{ secrets.DOCKER_USERNAME }}/paperless-metadata-processor:latest .
 
-    # Step 5: Push the Docker image to DockerHub (optional)
-    - name: Push Docker image
+    # Step 5: Tag Docker image with release version and push to DockerHub
+    - name: Push Docker image with version tag
+      run: |
+        docker tag ${{ secrets.DOCKER_USERNAME }}/paperless-metadata-processor:latest ${{ secrets.DOCKER_USERNAME }}/paperless-metadata-processor:${{ github.event.release.tag_name }}
+        docker push ${{ secrets.DOCKER_USERNAME }}/paperless-metadata-processor:${{ github.event.release.tag_name }}
+
+    # Step 6: Push Docker image with latest tag
+    - name: Push Docker image with latest tag
       run: |
         docker push ${{ secrets.DOCKER_USERNAME }}/paperless-metadata-processor:latest
