@@ -1,0 +1,94 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IntelliJ IDEA / PyCharm specific files
+.idea/
+*.iml
+*.iws
+
+# PyCharm project files
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/vcs.xml
+.idea/jsLibraryMappings.xml
+.idea/gradle.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/pythonTerminal/
+.idea/sqlDataSources.xml
+.idea/targetedSdk.xml
+.idea/assetWizard.xml
+.idea/jarRepositories.xml
+.idea/spellchecker.xml
+
+# JetBrains IDEs crash reports
+hs_err_pid*
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+nosetests.xml
+coverage/
+*.log
+
+# Environments
+.env
+.env.*
+
+# Windows specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# IDE settings
+.vscode/
+*.swp
+*.swo
+
+# Editor backups
+*.bak
+*.tmp
+*.old
+
+# System files
+*.DS_Store
+*.directory

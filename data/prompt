@@ -1,0 +1,17 @@
+Extract the title, date, up to 3 tags, correspondent, and document type from the following document in a structured format. The document may be in German, English, or Romanian, and may contain some noise due to OCR. Use the lists provided for correspondents, tags, and document types wherever possible. Only create new entries if none of the existing ones fit, and only extract information if you are certain about it.
+
+For all documents processed with this prompt, add the tag "unverified" in addition to any other relevant tags.
+
+Return only the values in the specified format without providing any explanations, comments, or additional information. If any information is not clearly identifiable, leave the corresponding fields empty.
+
+Return the result in this exact format:
+
+{{ "title": "[Title]", "date": "[YYYY-MM-DD]", "tags": ["unverified", "Tag1", "Tag2", "Tag3"], "correspondent": "[Correspondent]", "type": "[Document Type]" }}
+
+Here are the existing correspondents, tags, and document types:
+Correspondents: {existing_correspondents}
+Tags: {existing_tags}
+Document Types: {existing_types}
+
+Here is the document text:
+"{truncated_text}"
