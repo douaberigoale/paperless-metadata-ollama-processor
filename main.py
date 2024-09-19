@@ -3,11 +3,11 @@ import sys
 
 from fastapi import HTTPException, FastAPI
 
-from logic.FileLoader import FileLoader
-from logic.Logger import Logger
-from logic.OllamaService import OllamaService
-from logic.PaperlessPostProcessor import PaperlessPostProcessor
-from logic.PaperlessService import PaperlessService
+from file_loader import FileLoader
+from logger import Logger
+from paperless_post_processor import PaperlessPostProcessor
+from services.ollama_service import OllamaService
+from services.paperless_service import PaperlessService
 
 
 def validate_env_vars():

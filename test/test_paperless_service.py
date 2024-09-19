@@ -1,7 +1,8 @@
 import unittest
 from unittest.mock import patch, Mock, MagicMock
 from requests.exceptions import HTTPError
-from logic.PaperlessService import PaperlessService
+
+from services.paperless_service import PaperlessService
 
 
 class PaperlessServiceTests(unittest.TestCase):

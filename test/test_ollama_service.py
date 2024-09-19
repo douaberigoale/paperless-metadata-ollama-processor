@@ -1,7 +1,8 @@
 import unittest
 from unittest.mock import patch, Mock, MagicMock
-from logic.OllamaService import OllamaService
-from logic.FileLoader import FileLoader
+
+from file_loader import FileLoader
+from services.ollama_service import OllamaService
 
 
 class OllamaServiceTests(unittest.TestCase):

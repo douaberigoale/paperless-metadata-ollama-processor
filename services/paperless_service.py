@@ -1,6 +1,7 @@
 import sys
 import requests
-from logic.Logger import Logger
+
+from logger import Logger
 
 
 class PaperlessService:
