@@ -1,6 +1,5 @@
 import sys
 import requests
-
 from logger import Logger
 
 
@@ -44,12 +43,36 @@ class PaperlessService:
             self.logger.log_error(f"Error retrieving existing data: {e}")
             raise
 
-    def update_document(self, doc_id, metadata):
+    def update_document(self, doc_id, new_metadata):
         try:
-            self.logger.log(f"Updating Paperless document ID {doc_id} with metadata: {metadata}")
-            response = requests.patch(f"{self.paperless_documents_url}{doc_id}/", json=metadata, headers=self.headers)
+            self.logger.log(f"Fetching existing metadata for document ID: {doc_id}")
+            response = requests.get(f"{self.paperless_documents_url}{doc_id}/", headers=self.headers)
             response.raise_for_status()
-            return response.status_code
+            document = response.json()
+
+            # Update title
+            document['title'] = new_metadata.get('title', document['title'])
+
+            # Append tags, avoid duplicates
+            existing_tags = {tag['name'] for tag in document.get('tags', [])}
+            new_tags = set(new_metadata.get('tags', []))
+            combined_tags = list(existing_tags.union(new_tags))
+            document['tags'] = combined_tags
+
+            # Set correspondent only if empty
+            if not document.get('correspondent'):
+                document['correspondent'] = new_metadata.get('correspondent')
+
+            # Set document type only if empty
+            if not document.get('type'):
+                document['type'] = new_metadata.get('type')
+
+            # Log and update document
+            self.logger.log(f"Updating Paperless document ID {doc_id} with new metadata: {document}")
+            update_response = requests.patch(f"{self.paperless_documents_url}{doc_id}/", json=document, headers=self.headers)
+            update_response.raise_for_status()
+
+            return update_response.status_code
         except Exception as e:
             self.logger.log_error(f"Error updating Paperless document ID {doc_id}: {e}")
             raise
