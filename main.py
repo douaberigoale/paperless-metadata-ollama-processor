@@ -81,7 +81,7 @@ def read_root():
 
 
 @app.get("/process/{doc_id}")
-async def process_one(doc_id: int):
+async def process(doc_id: int):
     logger = Logger(LOG_FILE)
     file_loader = FileLoader()
 

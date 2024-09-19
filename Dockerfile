@@ -10,6 +10,10 @@ COPY . .
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
+# Add the post-consumption hook script to the /data directory
+COPY post_consumption_hook.py /data/post_consumption_hook.py
+RUN chmod +x /data/post_consumption_hook.py
+
 ENV APP_PORT=5000
 ENV LOG_FILE=/data/log
 ENV OLLAMA_PROMPT_FILE=/data/prompt
