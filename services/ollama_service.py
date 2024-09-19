@@ -1,7 +1,8 @@
 import json
 import requests
-from logic.Logger import Logger
-from logic.FileLoader import FileLoader
+
+from file_loader import FileLoader
+from logger import Logger
 
 
 class OllamaService:

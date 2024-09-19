@@ -1,4 +1,5 @@
-from logic import PaperlessService, OllamaService
+from services.ollama_service import OllamaService
+from services.paperless_service import PaperlessService
 
 
 class PaperlessPostProcessor:

@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import MagicMock
 
-from logic.OllamaService import OllamaService
-from logic.PaperlessPostProcessor import PaperlessPostProcessor
-from logic.PaperlessService import PaperlessService
+from paperless_post_processor import PaperlessPostProcessor
+from services.ollama_service import OllamaService
+from services.paperless_service import PaperlessService
 
 
 class TestPaperlessPostProcessor(unittest.TestCase):
