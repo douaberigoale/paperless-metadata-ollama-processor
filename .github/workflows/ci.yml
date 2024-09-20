@@ -38,8 +38,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-      - name: Set up Python 3.x
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
@@ -57,31 +59,30 @@ jobs:
         id: check_major
         run: |
           if git log -1 --pretty=%B | grep -q '#major'; then
-            echo "version=major" | tee -a $GITHUB_OUTPUT
+            echo "version=major" >> $GITHUB_OUTPUT
           fi
 
       - name: Check for /#minor keyword
         id: check_minor
-        if: steps.check_major.outcome == 'failure'
+        if: steps.check_major.outputs.version == ''
         run: |
           if git log -1 --pretty=%B | grep -q '#minor'; then
-            echo "version=minor" | tee -a $GITHUB_OUTPUT
+            echo "version=minor" >> $GITHUB_OUTPUT
           fi
 
-      - name: Check for /#patch keyword
-        id: check_patch
-        if: steps.check_minor.outcome == 'failure'
+      - name: Set default patch version
+        id: default_patch
+        if: steps.check_minor.outputs.version == ''
         run: |
-          if git log -1 --pretty=%B | grep -q '#patch'; then
-            echo "version=patch" | tee -a $GITHUB_OUTPUT
-          fi
+          echo "version=patch" >> $GITHUB_OUTPUT
 
-      - name: Fail if no version keyword found
-        if: steps.check_patch.outcome == 'failure'
+      - name: Determine current version
+        id: current_version
         run: |
-          echo "No version bump keywords (#major, #minor, #patch) found."
+          CURRENT_VERSION=$(git describe --tags --abbrev=0 || echo "0.0.0")
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
 
-      - name: Bump version (Tag Only)
+      - name: Tag the version
         run: |
-          bump2version ${{ steps.check_major.outputs.version }} --current-version $(git describe --tags --abbrev=0) --allow-dirty
+          bump2version ${{ steps.default_patch.outputs.version || steps.check_minor.outputs.version || steps.check_major.outputs.version }} --current-version ${{ env.CURRENT_VERSION }} --allow-dirty
           git push origin --tags
