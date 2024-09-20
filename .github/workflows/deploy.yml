@@ -31,14 +31,14 @@ jobs:
       - name: Build Docker image
         run: |
           docker buildx build --platform linux/amd64,linux/arm64 \
-            -t ${{ secrets.DOCKER_USERNAME }}/paperless-metadata-processor:latest \
-            -t ${{ secrets.DOCKER_USERNAME }}/paperless-metadata-processor:${{ steps.get_tag.outputs.VERSION }} \
+            -t ${{ secrets.DOCKER_USERNAME }}/paperless-metadata-ollama-processor:latest \
+            -t ${{ secrets.DOCKER_USERNAME }}/paperless-metadata-ollama-processor:${{ steps.get_tag.outputs.VERSION }} \
             --push .
 
       - name: Push Docker image with version tag
         run: |
-          docker buildx imagetools inspect ${{ secrets.DOCKER_USERNAME }}/paperless-metadata-processor:${{ steps.get_tag.outputs.VERSION }}
+          docker buildx imagetools inspect ${{ secrets.DOCKER_USERNAME }}/paperless-metadata-ollama-processor:${{ steps.get_tag.outputs.VERSION }}
 
       - name: Push Docker image with latest tag
         run: |
-          docker buildx imagetools inspect ${{ secrets.DOCKER_USERNAME }}/paperless-metadata-processor:latest
+          docker buildx imagetools inspect ${{ secrets.DOCKER_USERNAME }}/paperless-metadata-ollama-processor:latest

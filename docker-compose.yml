@@ -3,10 +3,17 @@ services:
   # (... paperless services ...) #
 
   paperless-metadata-ollama-processor:
-    image: docker.io/library/paperless-postprocessing
+    container_name: postprocessor
+    image: douaberigoale/paperless-metadata-ollama-processor:latest
     ports:
       - "5000:5000"
     environment:
       - PAPERLESS_API_TOKEN=<your-paperless-api-token>
     volumes:
-      - ./data:/data
+      - /home/alex/bin/paperless/postprocessing:/data
+    networks:
+      - paperless-network
+
+networks:
+  paperless-network:
+    external: true

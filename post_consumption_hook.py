@@ -10,7 +10,7 @@ def post_consumption_hook():
 
     document_id = sys.argv[1]
     # change port here if needed
-    api_url = "http://localhost:5000/process/{document_id}"
+    api_url = "http://postprocessor:5000/process/{document_id}"
 
     try:
         response = requests.get(api_url)

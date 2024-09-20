@@ -39,31 +39,49 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Set up Python 3.x
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
+
+      - name: Install bump2version
+        run: |
+          pip install bump2version
 
       - name: Set Git user information
         run: |
           git config --local user.name "Versioning"
           git config --local user.email "alexv.banciu@gmail.com"
 
-      - name: Determine version bump
-        id: version_bump
+      - name: Check for /#major keyword
+        id: check_major
         run: |
           if git log -1 --pretty=%B | grep -q '#major'; then
-            echo "::set-output name=version::major"
-          elif git log -1 --pretty=%B | grep -q '#minor'; then
-            echo "::set-output name=version::minor"
-          else
-            echo "::set-output name=version::patch"
+            echo "version=major" | tee -a $GITHUB_OUTPUT
           fi
 
-      - name: Tag the version
+      - name: Check for /#minor keyword
+        id: check_minor
+        if: steps.check_major.outcome == 'failure'
         run: |
-          VERSION=$(bump2version --dry-run --list ${{ steps.version_bump.outputs.version }} | grep new_version= | sed 's/new_version=//')
-          git tag -a "v$VERSION" -m "Version $VERSION"
+          if git log -1 --pretty=%B | grep -q '#minor'; then
+            echo "version=minor" | tee -a $GITHUB_OUTPUT
+          fi
+
+      - name: Check for /#patch keyword
+        id: check_patch
+        if: steps.check_minor.outcome == 'failure'
+        run: |
+          if git log -1 --pretty=%B | grep -q '#patch'; then
+            echo "version=patch" | tee -a $GITHUB_OUTPUT
+          fi
+
+      - name: Fail if no version keyword found
+        if: steps.check_patch.outcome == 'failure'
+        run: |
+          echo "No version bump keywords (#major, #minor, #patch) found."
+
+      - name: Bump version (Tag Only)
+        run: |
+          bump2version ${{ steps.check_major.outputs.version }} --current-version $(git describe --tags --abbrev=0) --allow-dirty
           git push origin --tags
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
