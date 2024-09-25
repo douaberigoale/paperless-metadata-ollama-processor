@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, Mock, MagicMock
 import requests
-from services.tag_service import TagService
+from services.paperless.tag_service import TagService
 
 
 class TestTagService(unittest.TestCase):
@@ -10,7 +10,7 @@ class TestTagService(unittest.TestCase):
         self.mock_logger = MagicMock()
         self.tag_service = TagService(self.mock_logger, 'http://api_url', 'test_token')
 
-    @patch('services.tag_service.requests.get')  # Patch the correct module path
+    @patch('services.paperless.tag_service.requests.get')  # Patch the correct module path
     def test_get_all_tags_success(self, mock_get):
         # Given: a successful response from the API
         mock_response = Mock()
@@ -31,7 +31,7 @@ class TestTagService(unittest.TestCase):
         self.assertEqual(tags[0]['name'], "Tag One")
         self.assertEqual(tags[1]['name'], "Tag Two")
 
-    @patch('services.tag_service.requests.get')
+    @patch('services.paperless.tag_service.requests.get')
     def test_get_all_tags_failure(self, mock_get):
         # Given: a failed request that raises a RequestException
         mock_get.side_effect = requests.exceptions.RequestException("API Failure")
@@ -41,7 +41,7 @@ class TestTagService(unittest.TestCase):
             self.tag_service.get_all()
         self.mock_logger.log_error.assert_called_once_with("Error fetching tags: API Failure")
 
-    @patch('services.tag_service.requests.get')
+    @patch('services.paperless.tag_service.requests.get')
     def test_get_all_tag_names_success(self, mock_get):
         # Given: a successful API response with tag names
         mock_response = Mock()
@@ -60,7 +60,7 @@ class TestTagService(unittest.TestCase):
         # Then: the tag names should be extracted from the response
         self.assertEqual(tag_names, ["Tag One", "Tag Two"])
 
-    @patch('services.tag_service.requests.get')
+    @patch('services.paperless.tag_service.requests.get')
     def test_get_tag_name_by_id_success(self, mock_get):
         # Given: a successful API response with multiple tags
         mock_response = Mock()
@@ -79,7 +79,7 @@ class TestTagService(unittest.TestCase):
         # Then: the correct tag name should be returned
         self.assertEqual(tag_name[0], "Tag Two")
 
-    @patch('services.tag_service.requests.get')
+    @patch('services.paperless.tag_service.requests.get')
     def test_get_tag_name_by_id_not_found(self, mock_get):
         # Given: a successful API response with multiple tags
         mock_response = Mock()
@@ -100,7 +100,7 @@ class TestTagService(unittest.TestCase):
 
     # New Tests for Uncovered Methods
 
-    @patch('services.tag_service.requests.get')
+    @patch('services.paperless.tag_service.requests.get')
     def test_get_tag_ids_by_names_success(self, mock_get):
         # Given: a successful API response with multiple tags
         mock_response = Mock()
@@ -119,7 +119,7 @@ class TestTagService(unittest.TestCase):
         # Then: the correct tag IDs should be returned
         self.assertEqual(tag_ids, [1, 2])
 
-    @patch('services.tag_service.requests.get')
+    @patch('services.paperless.tag_service.requests.get')
     def test_get_tag_ids_by_names_partial_success(self, mock_get):
         # Given: a successful API response with some matching tag names
         mock_response = Mock()
@@ -138,7 +138,7 @@ class TestTagService(unittest.TestCase):
         # Then: only the valid tag ID should be returned
         self.assertEqual(tag_ids, [1])
 
-    @patch('services.tag_service.requests.post')
+    @patch('services.paperless.tag_service.requests.post')
     def test_create_tags_success(self, mock_post):
         # Given: a successful POST request for creating a new tag
         mock_response = Mock()
@@ -152,7 +152,7 @@ class TestTagService(unittest.TestCase):
         # Then: the ID of the newly created tag should be returned
         self.assertEqual(new_tag_ids, [3])
 
-    @patch('services.tag_service.requests.post')
+    @patch('services.paperless.tag_service.requests.post')
     def test_create_tags_failure(self, mock_post):
         # Given: a failed POST request
         mock_post.side_effect = requests.exceptions.RequestException("API Failure")

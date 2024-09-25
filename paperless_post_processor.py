@@ -1,7 +1,7 @@
 from logger import Logger
-from services.document_service import DocumentService
+from services.paperless.document_service import DocumentService
 from services.ollama_service import OllamaService
-from services.paperless_service import PaperlessService
+from services.paperless.paperless_service import PaperlessService
 
 
 class PaperlessPostProcessor:

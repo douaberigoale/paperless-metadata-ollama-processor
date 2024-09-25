@@ -1,8 +1,8 @@
 from file_loader import FileLoader
 from logger import Logger
-from services.correspondent_service import CorrespondentService
-from services.document_type_service import DocumentTypeService
-from services.tag_service import TagService
+from services.paperless.correspondent_service import CorrespondentService
+from services.paperless.document_type_service import DocumentTypeService
+from services.paperless.tag_service import TagService
 
 
 class PromptCreator:

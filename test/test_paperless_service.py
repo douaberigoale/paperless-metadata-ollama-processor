@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-from services.paperless_service import PaperlessService
+from services.paperless.paperless_service import PaperlessService
 from models.document import Document
 from models.extracted_metadata import ExtractedMetadata
 
