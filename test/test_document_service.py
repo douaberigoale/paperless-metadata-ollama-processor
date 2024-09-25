@@ -3,7 +3,7 @@ from unittest.mock import patch, Mock, MagicMock
 import requests
 from models.document import Document
 from models.postprocessed_document import PostProcessedDocument
-from services.document_service import DocumentService
+from services.paperless.document_service import DocumentService
 
 
 class TestDocumentService(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestDocumentService(unittest.TestCase):
         self.mock_logger = MagicMock()
         self.doc_service = DocumentService(self.mock_logger, 'http://api_url', 'test_token')
 
-    @patch('services.document_service.requests.get')
+    @patch('services.paperless.document_service.requests.get')
     def test_get_document_success(self, mock_get):
         # given
         mock_response = Mock()
@@ -44,7 +44,7 @@ class TestDocumentService(unittest.TestCase):
         self.assertEqual(document.tag_ids, [1, 2, 3])
         self.mock_logger.log_error.assert_not_called()
 
-    @patch('services.document_service.requests.get')
+    @patch('services.paperless.document_service.requests.get')
     def test_get_document_empty_response(self, mock_get):
         # given
         mock_response = Mock()
@@ -63,7 +63,7 @@ class TestDocumentService(unittest.TestCase):
         # assert
         self.mock_logger.log_error.assert_called_once_with("Value error: Empty response for document ID 1", unittest.mock.ANY)
 
-    @patch('services.document_service.requests.get')
+    @patch('services.paperless.document_service.requests.get')
     def test_get_document_non_json_response(self, mock_get):
         # given
         mock_response = Mock()
@@ -84,7 +84,7 @@ class TestDocumentService(unittest.TestCase):
             "Value error: Non-JSON response for document ID 1: <!DOCTYPE html>", unittest.mock.ANY
         )
 
-    @patch('services.document_service.requests.get')
+    @patch('services.paperless.document_service.requests.get')
     def test_get_document_json_decode_error(self, mock_get):
         # given
         mock_response = Mock()
@@ -103,7 +103,7 @@ class TestDocumentService(unittest.TestCase):
             "JSON decode error: Expecting value: line 1 column 1 (char 0), Response: invalid json", unittest.mock.ANY
         )
 
-    @patch('services.document_service.requests.get')
+    @patch('services.paperless.document_service.requests.get')
     def test_get_document_http_error(self, mock_get):
         # given
         mock_get.side_effect = requests.exceptions.HTTPError("404 Not Found")
@@ -117,7 +117,7 @@ class TestDocumentService(unittest.TestCase):
             "Request exception: 404 Not Found, Response: No response", unittest.mock.ANY
         )
 
-    @patch('services.document_service.requests.patch')
+    @patch('services.paperless.document_service.requests.patch')
     def test_update_document_success(self, mock_patch):
         # given
         mock_response = Mock()
@@ -146,7 +146,7 @@ class TestDocumentService(unittest.TestCase):
         self.mock_logger.log.assert_called_once_with(
             "Updating Paperless document with metadata: {'title': 'Updated Title', 'created': '2024-09-19', 'correspondent': 2, 'document_type': 3, 'tags': [1, 2, 3]}")
 
-    @patch('services.document_service.requests.patch')
+    @patch('services.paperless.document_service.requests.patch')
     def test_update_document_failure(self, mock_patch):
         # given
         mock_patch.side_effect = Exception("Internal Server Error")

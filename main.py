@@ -6,14 +6,14 @@ from fastapi import HTTPException, FastAPI
 from file_loader import FileLoader
 from logger import Logger
 from paperless_post_processor import PaperlessPostProcessor
-from services.correspondent_service import CorrespondentService
-from services.document_service import DocumentService
-from services.document_type_service import DocumentTypeService
+from services.paperless.correspondent_service import CorrespondentService
+from services.paperless.document_service import DocumentService
+from services.paperless.document_type_service import DocumentTypeService
 from services.ollama_service import OllamaService
-from services.paperless_service import PaperlessService
+from services.paperless.paperless_service import PaperlessService
 from services.prompt_creator import PromptCreator
 from services.response_processor import ResponseProcessor
-from services.tag_service import TagService
+from services.paperless.tag_service import TagService
 
 
 def validate_env_vars():
